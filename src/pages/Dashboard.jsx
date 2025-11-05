@@ -1,12 +1,12 @@
 import { 
-  Box, Heading, SimpleGrid, Card, CardBody, Text, Button, VStack, HStack, Icon, Flex 
-} from "@chakra-ui/react"
-import { Link, useNavigate } from "react-router-dom"
-import Sidebar from "../components/Sidebar"
-import { FiFileText, FiClock, FiXCircle, FiPlusCircle, FiSearch, FiLogOut } from "react-icons/fi"
-import { useState, useEffect } from "react"
-import ProximosVencimientos from "../functions/ProximosVencimientos"
-import MontosContratos from "../functions/MontosContratos"
+  Box, Heading, SimpleGrid, Card, CardBody, Text, Button, VStack, HStack, Icon, Flex, Drawer, DrawerBody, DrawerContent, DrawerOverlay, useDisclosure, IconButton 
+} from "@chakra-ui/react";
+import { Link, useNavigate } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
+import { FiFileText, FiClock, FiXCircle, FiPlusCircle, FiSearch, FiLogOut, FiMenu } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import ProximosVencimientos from "../functions/ProximosVencimientos";
+import MontosContratos from "../functions/MontosContratos";
 
 export default function Dashboard() {
   const [estadisticas, setEstadisticas] = useState({
@@ -15,6 +15,7 @@ export default function Dashboard() {
     Vencido: 0,
   });
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -48,15 +49,46 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <Box display="flex">
-      <Sidebar />
-      <Box ml="200px" p="6" w="100%">
+    <Box display="flex" flexDir={{ base: "column", md: "row" }}>
+      {/* Sidebar desktop */}
+      <Box display={{ base: "none", md: "block" }}>
+        <Sidebar />
+      </Box>
+
+    {/* Drawer (sidebar en mobile) */}
+    <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+      <DrawerOverlay />
+      <DrawerContent bg="blue.900" color="white" maxW="230px">
+        <DrawerBody p="0">
+          {isOpen && <Sidebar />} {/* ← Solo renderiza cuando está abierto */}
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+
+
+
+      {/* Contenido principal */}
+      <Box ml={{ base: 0, md: "210px" }} p={{ base: 4, md: 6 }} w="100%">
+        {/* Header */}
         <Flex justify="space-between" align="center" mb="8">
-          <Heading fontSize="2xl">Dashboard</Heading>
-          <Button 
-            leftIcon={<FiLogOut />} 
-            colorScheme="red" 
+          <Flex align="center" gap="3">
+            {/* Botón menú solo en mobile */}
+            <IconButton
+              icon={<FiMenu />}
+              aria-label="Abrir menú"
+              display={{ base: "flex", md: "none" }}
+              onClick={onOpen}
+              colorScheme="blue"
+              variant="outline"
+            />
+            <Heading fontSize={{ base: "xl", md: "2xl" }}>Dashboard</Heading>
+          </Flex>
+
+          <Button
+            leftIcon={<FiLogOut />}
+            colorScheme="red"
             variant="outline"
+            size={{ base: "sm", md: "md" }}
             onClick={handleLogout}
           >
             Logout
@@ -64,7 +96,7 @@ export default function Dashboard() {
         </Flex>
 
         {/* Métricas */}
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb="12">
+        <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6} mb="12">
           <Card bg="green.50" shadow="md">
             <CardBody textAlign="center">
               <Icon as={FiFileText} boxSize={8} color="green.500" mb={2} />
@@ -96,19 +128,34 @@ export default function Dashboard() {
           </Card>
         </SimpleGrid>
 
+        {/* Componentes de funciones */}
         <ProximosVencimientos />
         <MontosContratos />
 
         {/* Acciones */}
         <VStack spacing={6} mt="16">
-          <HStack spacing={8}>
+          <HStack spacing={{ base: 4, md: 8 }} flexWrap="wrap" justify="center">
             <Link to="/cargar">
-              <Button leftIcon={<FiPlusCircle />} colorScheme="blue" size="lg" px={10} py={6}>
+              <Button
+                leftIcon={<FiPlusCircle />}
+                colorScheme="blue"
+                size={{ base: "md", md: "lg" }}
+                px={{ base: 6, md: 10 }}
+                py={{ base: 4, md: 6 }}
+                w={{ base: "100%", sm: "auto" }}
+              >
                 Cargar contrato
               </Button>
             </Link>
             <Link to="/contratos">
-              <Button leftIcon={<FiSearch />} colorScheme="teal" size="lg" px={10} py={6}>
+              <Button
+                leftIcon={<FiSearch />}
+                colorScheme="teal"
+                size={{ base: "md", md: "lg" }}
+                px={{ base: 6, md: 10 }}
+                py={{ base: 4, md: 6 }}
+                w={{ base: "100%", sm: "auto" }}
+              >
                 Ver contratos
               </Button>
             </Link>
@@ -116,5 +163,5 @@ export default function Dashboard() {
         </VStack>
       </Box>
     </Box>
-  )
+  );
 }

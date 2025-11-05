@@ -42,36 +42,39 @@ export default function Home() {
         {/* Línea separadora */}
         <Divider borderColor="white" borderWidth="1px" mb={4} width="60%" margin="0 auto" />
 
-        {/* Glass Cards estilo Uiverse */}
+        {/* Glass Cards estilo Uiverse (responsive) */}
         <Box
-          py={16}
+          py={{ base: 10, md: 16 }}
           display="flex"
+          flexWrap="wrap"
           justifyContent="center"
-          alignItems="flex-start"
-          position="relative"
-          minH={500}
-          mt={12}
+          alignItems="center"
+          gap={{ base: 8, md: 0 }}
+          mt={{ base: 8, md: 12 }}
         >
           {propiedades.map((prop, index) => {
-            const rotations = [-15, 5, 25]; // rotaciones iniciales
+            const rotations = [-15, 5, 25];
             return (
               <Box
                 key={prop.id}
                 position="relative"
-                width="380px"
-                height="420px"
-                mx={index === 0 ? "-45px" : "-45px"}
-                borderRadius="10px"
+                width={{ base: "85%", sm: "320px", md: "360px", lg: "380px" }}
+                height={{ base: "300px", sm: "340px", md: "420px" }}
+                mx={{ base: 0, md: "-45px" }}
+                borderRadius="15px"
                 overflow="hidden"
                 bg="whiteAlpha.200"
                 border="1px solid rgba(255,255,255,0.1)"
                 boxShadow="0 25px 25px rgba(0,0,0,0.25)"
                 backdropFilter="blur(10px)"
-                transform={`rotate(${rotations[index]}deg)`}
+                transform={{
+                  base: "none",
+                  md: `rotate(${rotations[index]}deg)`,
+                }}
                 transition="all 0.5s ease"
                 _hover={{
-                  transform: "rotate(0deg)",
-                  mx: "10px",
+                  transform: { base: "scale(1.03)", md: "rotate(0deg)" },
+                  mx: { base: 0, md: "10px" },
                 }}
                 display="flex"
                 justifyContent="center"
@@ -86,14 +89,14 @@ export default function Home() {
                   _hover={{ transform: "scale(1.05)" }}
                 />
 
-                {/* Texto inferior con fondo gris y letras blancas */}
+                {/* Texto inferior */}
                 <Box
                   position="absolute"
                   bottom="0"
                   w="100%"
                   bg="gray.700"
                   color="white"
-                  fontSize="2sm"
+                  fontSize={{ base: "sm", md: "md" }}
                   textAlign="center"
                   py={2}
                   px={1}

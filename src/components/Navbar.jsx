@@ -45,8 +45,11 @@ export default function Navbar() {
           <Link as={RouterLink} to="/contacto">Contacto</Link>
         </HStack>
 
-        {/* Portal Empleados (desktop) */}
-        <AnimatedButton />
+        {/* Portal Empleados (solo desktop) */}
+        <Box display={{ base: "none", md: "block" }}>
+          <AnimatedButton />
+        </Box>
+
 
         {/* Botón hamburguesa (mobile) */}
         <IconButton

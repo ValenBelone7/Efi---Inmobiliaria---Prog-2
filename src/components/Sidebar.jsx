@@ -1,33 +1,62 @@
-import { Box, VStack, Text, IconButton } from "@chakra-ui/react";
+import {
+  Box,
+  VStack,
+  Text,
+  Flex,
+} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { MdHome, MdAddBox, MdList, MdAddBusiness, MdMail } from "react-icons/md"; // 👈 nuevo ícono
+import {
+  MdHome,
+  MdAddBox,
+  MdList,
+  MdAddBusiness,
+  MdMail,
+} from "react-icons/md";
 
 export default function Sidebar() {
   return (
-    <Box w="210px" bg="blue.900" color="white" h="100vh" p="5" position="fixed">
+    <Box
+      w="210px"
+      bg="blue.900"
+      color="white"
+      h="100vh"
+      p="5"
+      position="fixed"
+    >
       <Text fontSize="xl" fontWeight="bold" mb="8">
         AlquiGest
       </Text>
+
       <VStack align="start" spacing="5">
         <Link to="/dashboard">
-          <IconButton icon={<MdHome />} colorScheme="blue" variant="ghost" /> Dashboard
+          <Flex align="center" gap={2}>
+            <MdHome /> Dashboard
+          </Flex>
         </Link>
         <Link to="/cargar">
-          <IconButton icon={<MdAddBox />} colorScheme="blue" variant="ghost" /> Cargar contrato
+          <Flex align="center" gap={2}>
+            <MdAddBox /> Cargar contrato
+          </Flex>
         </Link>
         <Link to="/contratos">
-          <IconButton icon={<MdList />} colorScheme="blue" variant="ghost" /> Contratos
+          <Flex align="center" gap={2}>
+            <MdList /> Contratos
+          </Flex>
         </Link>
-        {/* 🏡 Nuevo botón para cargar propiedad */}
         <Link to="/cargar-propiedad">
-          <IconButton icon={<MdAddBusiness />} colorScheme="blue" variant="ghost" /> Cargar propiedad
+          <Flex align="center" gap={2}>
+            <MdAddBusiness /> Cargar propiedad
+          </Flex>
         </Link>
         <Link to="/solicitudes">
-        <IconButton icon={<MdMail />} colorScheme="blue" variant="ghost" />
-        Solicitudes
+          <Flex align="center" gap={2}>
+            <MdMail /> Solicitudes
+          </Flex>
         </Link>
         <Link to="/ver-propiedades">
-          <IconButton icon={<MdList />} colorScheme="blue" variant="ghost" /> Ver propiedades
+          <Flex align="center" gap={2}>
+            <MdList /> Ver propiedades
+          </Flex>
         </Link>
       </VStack>
     </Box>

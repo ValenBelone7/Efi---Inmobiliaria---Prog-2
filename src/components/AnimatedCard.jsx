@@ -1,16 +1,18 @@
 import { Box, Heading, Text, Icon } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 
+/* 🔁 Animación giratoria para el borde degradado */
 const rotateGradient = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 `;
 
+/* 🧱 Tarjeta animada para destacar servicios o características */
 export default function AnimatedCard({ icon, title, description }) {
   return (
     <Box
       position="relative"
-      w="310px"
+      w={{ base: "100%", sm: "270px", md: "310px" }}
       h="300px"
       bg="gray.700"
       borderRadius="xl"
@@ -26,10 +28,8 @@ export default function AnimatedCard({ icon, title, description }) {
         position: "absolute",
         width: "100px",
         height: "130%",
-        backgroundImage:
-          "linear-gradient(180deg, rgb(0,183,255), rgb(255,48,255))",
+        backgroundImage: "linear-gradient(180deg, rgb(0,183,255), rgb(255,48,255))",
         animation: `${rotateGradient} 3s linear infinite`,
-        transition: "all 0.2s linear",
       }}
       _after={{
         content: '""',
