@@ -21,6 +21,7 @@ import {
   Drawer,
   DrawerOverlay,
   DrawerContent,
+  DrawerBody,
   Avatar,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -34,7 +35,8 @@ export default function VerPropiedades() {
   const [propiedadSeleccionada, setPropiedadSeleccionada] = useState(null);
   const [modoEdicion, setModoEdicion] = useState(false);
   const [mostrarEliminar, setMostrarEliminar] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const drawer = useDisclosure();
+  const modal = useDisclosure();
 
   const propiedadesFiltradas = propiedades.filter((p) =>
     (p.titulo || "").toLowerCase().includes(busqueda.toLowerCase())
@@ -44,37 +46,45 @@ export default function VerPropiedades() {
     setPropiedadSeleccionada({ ...propiedad });
     setModoEdicion(true);
     setMostrarEliminar(false);
-    onOpen();
+    modal.onOpen();
   };
 
   const handleEliminar = (propiedad) => {
     setPropiedadSeleccionada(propiedad);
     setMostrarEliminar(true);
     setModoEdicion(false);
-    onOpen();
+    modal.onOpen();
   };
 
   const guardarEdicion = () => {
     editarPropiedad(propiedadSeleccionada.id, propiedadSeleccionada);
-    onClose();
+    modal.onClose();
   };
 
   const confirmarEliminar = () => {
     eliminarPropiedad(propiedadSeleccionada.id);
-    onClose();
+    modal.onClose();
   };
 
   return (
     <Box>
-      {/* Drawer mobile */}
+      {/* Sidebar drawer para mobile */}
       <IconButton
         display={{ base: "flex", md: "none" }}
         icon={<FiMenu />}
         aria-label="Abrir menú"
         m={4}
-        onClick={onOpen}
+        onClick={drawer.onOpen}
       />
-      <SidebarDrawer isOpen={isOpen} onClose={onClose} />
+      
+      <Drawer placement="left" onClose={drawer.onClose} isOpen={drawer.isOpen}>
+        <DrawerOverlay />
+        <DrawerContent bg="blue.900" color="white" maxW="230px">
+          <DrawerBody p="0">
+            {drawer.isOpen && <Sidebar />}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
 
       <Flex>
         {/* Sidebar desktop */}
@@ -91,45 +101,56 @@ export default function VerPropiedades() {
             mb={6}
           />
 
-        <VStack spacing={4} align="stretch">
-          {propiedadesFiltradas.map((item) => (
-            <HStack
-              key={item.id}
-              justify="space-between"
-              p={4}
-              borderWidth="1px"
-              borderRadius="lg"
-              bg="gray.50"
-              _dark={{ bg: "gray.800" }}
-              _hover={{ bg: "gray.100", _dark: { bg: "gray.700" } }}
-              transition="0.2s"
-              flexWrap="wrap"
-            >
-              <HStack spacing={3} flex="1" minW={{ base: "100%", md: "auto" }}>
-                <Avatar name={item.nombre} />
-                <VStack align="start" spacing={0}>
-                  <Text fontWeight="bold">{item.nombre}</Text>
+          <VStack spacing={4} align="stretch">
+            {propiedadesFiltradas.map((item) => (
+              <HStack
+                key={item.id}
+                justify="space-between"
+                p={4}
+                borderWidth="1px"
+                borderRadius="lg"
+                bg="white"
+                _dark={{ bg: "gray.800" }}
+                _hover={{ bg: "gray.50", _dark: { bg: "gray.700" } }}
+                transition="0.2s"
+                flexWrap="wrap"
+              >
+                <VStack align="start" spacing={0} flex="1">
+                  <Text fontWeight="bold">{item.titulo}</Text>
                   <Text fontSize="sm" color="gray.500">
-                    {item.detalle}
+                    {item.descripcion}
                   </Text>
+                  <HStack>
+                    <Badge colorScheme={item.tipo === "Venta" ? "green" : "blue"}>
+                      {item.tipo}
+                    </Badge>
+                    <Text fontWeight="semibold">{item.precio}</Text>
+                  </HStack>
                 </VStack>
+
+                <HStack spacing={2}>
+                  <Button 
+                    size="sm" 
+                    colorScheme="yellow"
+                    onClick={() => handleEditar(item)}
+                  >
+                    Editar
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    colorScheme="red"
+                    onClick={() => handleEliminar(item)}
+                  >
+                    Eliminar
+                  </Button>
+                </HStack>
               </HStack>
-
-              <Badge colorScheme="green">Activo</Badge>
-
-              <HStack spacing={2}>
-                <Button size="sm" colorScheme="blue">Ver</Button>
-                <Button size="sm" colorScheme="yellow">Editar</Button>
-                <Button size="sm" colorScheme="red">Eliminar</Button>
-              </HStack>
-            </HStack>
-          ))}
-        </VStack>
-
+            ))}
+          </VStack>
 
           {/* Modal */}
           {propiedadSeleccionada && (
-            <Modal isOpen={isOpen} onClose={onClose} size="lg">
+            <Modal isOpen={modal.isOpen} onClose={modal.onClose} size="lg">
               <ModalOverlay />
               <ModalContent>
                 {modoEdicion && (
@@ -158,7 +179,7 @@ export default function VerPropiedades() {
                       <Button colorScheme="blue" mr={3} onClick={guardarEdicion}>
                         Guardar cambios
                       </Button>
-                      <Button variant="ghost" onClick={onClose}>
+                      <Button variant="ghost" onClick={modal.onClose}>
                         Cancelar
                       </Button>
                     </ModalFooter>
@@ -178,7 +199,7 @@ export default function VerPropiedades() {
                       <Button colorScheme="red" mr={3} onClick={confirmarEliminar}>
                         Eliminar
                       </Button>
-                      <Button variant="ghost" onClick={onClose}>
+                      <Button variant="ghost" onClick={modal.onClose}>
                         Cancelar
                       </Button>
                     </ModalFooter>

@@ -22,13 +22,14 @@ import {
   Drawer,
   DrawerOverlay,
   DrawerContent,
-  IconButton,
   Flex,
+  DrawerBody
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import jsPDF from "jspdf";
 import { FiMenu } from "react-icons/fi";
+import { IconButton } from "@chakra-ui/react";
 
 export default function VerContratos() {
   const [contratos, setContratos] = useState([]);
@@ -140,21 +141,24 @@ export default function VerContratos() {
 
   return (
     <Box>
-      {/* Drawer para mobile */}
+      {/* Sidebar drawer para mobile */}
       <IconButton
         display={{ base: "flex", md: "none" }}
         icon={<FiMenu />}
         aria-label="Abrir menú"
         m={4}
-        onClick={onDrawerOpen}
+        onClick={onOpen}
       />
-      <Drawer placement="left" onClose={onDrawerClose} isOpen={isDrawerOpen}>
+      {/* Drawer (sidebar en mobile) */}
+      <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent>
-          <Sidebar />
+        <DrawerContent bg="blue.900" color="white" maxW="230px">
+          <DrawerBody p="0">
+            {isOpen && <Sidebar />} {/* ← Solo renderiza cuando está abierto */}
+          </DrawerBody>
         </DrawerContent>
       </Drawer>
-
+      
       <Flex>
         {/* Sidebar desktop */}
         <Box display={{ base: "none", md: "block" }} w="210px">

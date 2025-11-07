@@ -1,5 +1,5 @@
 import { 
-  Box, FormControl, FormLabel, Input, Button, VStack, Select, Card, CardBody, Heading, HStack, Flex, Icon, Divider, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, IconButton 
+  Box, FormControl, FormLabel, Input, Button, VStack, Select, Card, CardBody, Heading, HStack, Flex, Icon, Divider, Drawer, DrawerBody ,DrawerOverlay, DrawerContent, DrawerCloseButton, useDisclosure, IconButton 
 } from "@chakra-ui/react"
 import { useState } from "react"
 import Sidebar from "../components/Sidebar"
@@ -80,11 +80,13 @@ export default function CargarContrato() {
         m={4}
         onClick={onOpen}
       />
+      {/* Drawer (sidebar en mobile) */}
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <Sidebar />
+        <DrawerContent bg="blue.900" color="white" maxW="230px">
+          <DrawerBody p="0">
+            {isOpen && <Sidebar />} {/* ← Solo renderiza cuando está abierto */}
+          </DrawerBody>
         </DrawerContent>
       </Drawer>
 

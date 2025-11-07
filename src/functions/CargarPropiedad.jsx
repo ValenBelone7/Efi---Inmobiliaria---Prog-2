@@ -15,6 +15,7 @@ import {
   IconButton,
   Flex,
   useDisclosure,
+  DrawerBody
 } from "@chakra-ui/react";
 import Sidebar from "../components/Sidebar";
 import { useData } from "../dataContext";
@@ -50,7 +51,7 @@ export default function CargarPropiedad() {
 
   return (
     <Box>
-      {/* Drawer mobile */}
+      {/* Sidebar drawer para mobile */}
       <IconButton
         display={{ base: "flex", md: "none" }}
         icon={<FiMenu />}
@@ -58,10 +59,13 @@ export default function CargarPropiedad() {
         m={4}
         onClick={onOpen}
       />
+      {/* Drawer (sidebar en mobile) */}
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
-        <DrawerContent>
-          <Sidebar />
+        <DrawerContent bg="blue.900" color="white" maxW="230px">
+          <DrawerBody p="0">
+            {isOpen && <Sidebar />} {/* ← Solo renderiza cuando está abierto */}
+          </DrawerBody>
         </DrawerContent>
       </Drawer>
 
